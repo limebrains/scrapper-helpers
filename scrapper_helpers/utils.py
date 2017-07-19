@@ -23,16 +23,13 @@ def caching(func):
 class Cache:
     @classmethod
     def set(cls, key, response):
-        print(key, response, CACHE_DIR)
         if not os.path.exists(CACHE_DIR):
             os.makedirs(CACHE_DIR)
-        print(os.path.join(CACHE_DIR, key))
         with open(os.path.join(CACHE_DIR, key), "wb") as file:
             pickle.dump(response, file)
 
     @classmethod
     def get(cls, key):
-        print(key, CACHE_DIR)
         try:
             with open(os.path.join(CACHE_DIR, key), "rb") as file:
                 return pickle.load(file)
