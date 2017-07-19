@@ -2,6 +2,7 @@ import os
 import pickle
 
 DEBUG = os.environ.get('DEBUG')
+CACHE_DIR = os.environ.get('CACHE_DIR', '/var/tmp/scrapper-helpers/')
 
 
 def caching(func):
@@ -22,15 +23,15 @@ def caching(func):
 class Cache:
     @classmethod
     def set(cls, key, response):
-        if not os.path.exists("cache"):
-            os.makedirs("cache")
-        with open(os.path.join(os.path.dirname(__file__), "cache", key), "wb") as file:
+        if not os.path.exists(CACHE_DIR):
+            os.makedirs(CACHE_DIR)
+        with open(os.path.join(CACHE_DIR, key), "wb") as file:
             pickle.dump(response, file)
 
     @classmethod
     def get(cls, key):
         try:
-            with open(os.path.join(os.path.dirname(__file__), "cache", key), "rb") as file:
+            with open(os.path.join(CACHE_DIR, key), "rb") as file:
                 return pickle.load(file)
         except FileNotFoundError as e:
             return None
