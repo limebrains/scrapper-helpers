@@ -10,7 +10,7 @@ except ImportError:
 
 DEBUG = os.environ.get('DEBUG')
 CACHE_DIR = os.environ.get('CACHE_DIR', '/var/tmp/scrapper-helpers/')
-MAX_FILENAME_LENGTH = subprocess.check_output("getconf NAME_MAX /", shell=True)
+MAX_FILENAME_LENGTH = os.environ.get('MAX_FILENAME_LENGTH', subprocess.check_output("getconf NAME_MAX /", shell=True))
 
 def key_md5(*args):
     return hashlib.md5("".join(str(args)).encode("utf-8")).hexdigest()
