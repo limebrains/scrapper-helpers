@@ -19,6 +19,10 @@ def key_sha1(*args):
     return hashlib.sha1("".join(str(args)).encode("utf-8")).hexdigest()
 
 
+def default_key_func(*args):
+    return '{0}_{1}'.format(func.__name__, str(args[0]).replace('/', '').replace(':', ''))
+
+
 def html_decode(s):
     """
     Returns the ASCII decoded version of the given HTML string. This does
@@ -71,14 +75,11 @@ def normalize_text(text, lower=True, replace_spaces='_'):
     return decoded_utf8
 
 
-def caching(key_func=None):
+def caching(key_func=default_key_func):
     def caching_func(func):
         if DEBUG:
             def decorated(*args):
-                if key_func:
-                    key = key_func(args)
-                else:
-                    key = '{0}_{1}'.format(func.__name__, str(args[0]).replace('/', '').replace(':', ''))
+                key = key_func(args)
                 if Cache.get(key):
                     return Cache.get(key)
                 response = func(*args)
