@@ -11,6 +11,14 @@ DEBUG = os.environ.get('DEBUG')
 CACHE_DIR = os.environ.get('CACHE_DIR', '/var/tmp/scrapper-helpers/')
 
 
+def key_md5(*args):
+    return hashlib.md5("".join(str(args)).encode("utf-8")).hexdigest()
+
+
+def key_sha1(*args):
+    return hashlib.sha1("".join(str(args)).encode("utf-8")).hexdigest()
+
+
 def html_decode(s):
     """
     Returns the ASCII decoded version of the given HTML string. This does
@@ -63,19 +71,24 @@ def normalize_text(text, lower=True, replace_spaces='_'):
     return decoded_utf8
 
 
-def caching(func):
-    if DEBUG:
-        def decorated(*args):
-            key = '{0}_{1}'.format(func.__name__, str(args[0]).replace('/', '').replace(':', ''))
-            if Cache.get(key):
-                return Cache.get(key)
-            response = func(*args)
-            Cache.set(key, response)
-            return response
+def caching(key_func=None):
+    def caching_func(func):
+        if DEBUG:
+            def decorated(*args):
+                if key_func:
+                    key = key_func(args)
+                else:
+                    key = '{0}_{1}'.format(func.__name__, str(args[0]).replace('/', '').replace(':', ''))
+                if Cache.get(key):
+                    return Cache.get(key)
+                response = func(*args)
+                Cache.set(key, response)
+                return response
 
-        return decorated
-    else:
-        return func
+            return decorated
+        else:
+            return func
+    return caching_func
 
 
 class Cache:
