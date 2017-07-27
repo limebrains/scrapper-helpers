@@ -1,5 +1,6 @@
 import os
 import pickle
+import subprocess
 import unicodedata
 
 try:
@@ -9,7 +10,7 @@ except ImportError:
 
 DEBUG = os.environ.get('DEBUG')
 CACHE_DIR = os.environ.get('CACHE_DIR', '/var/tmp/scrapper-helpers/')
-
+MAX_FILENAME_LENGTH = subprocess.check_output("getconf NAME_MAX /", shell=True)
 
 def key_md5(*args):
     return hashlib.md5("".join(str(args)).encode("utf-8")).hexdigest()
@@ -20,7 +21,7 @@ def key_sha1(*args):
 
 
 def default_key_func(*args):
-    return '{0}_{1}'.format(func.__name__, str(args[0]).replace('/', '').replace(':', ''))
+    return '{0}_{1}'.format(func.__name__, str(args[0]).replace('/', '').replace(':', ''))[:MAX_FILENAME_LENGTH]
 
 
 def html_decode(s):
