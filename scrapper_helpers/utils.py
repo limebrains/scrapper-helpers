@@ -55,7 +55,6 @@ def html_decode(s):
 def replace_all(text, dic):
     """
     This method returns the input string, but replaces its characters according to the input dictionary.
-
     :param text: input string
     :param dic: dictionary containing the changes. key is the character that's supposed to be changed and value is
             the desired value
