@@ -1,5 +1,9 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 import pickle
+import hashlib
 import subprocess
 import unicodedata
 
@@ -15,16 +19,20 @@ MAX_FILENAME_LENGTH = os.environ.get(
     int(subprocess.check_output("getconf NAME_MAX /", shell=True).strip())
 )
 
+
 def key_md5(*args):
+    """This method creates an MD5 from the input parameters, used for caching filename"""
     return hashlib.md5("".join(str(args)).encode("utf-8")).hexdigest()
 
 
 def key_sha1(*args):
+    """This method creates an SHA-1 from the input parameters, used for caching filename"""
     return hashlib.sha1("".join(str(args)).encode("utf-8")).hexdigest()
 
 
 def default_key_func(*args):
-    return '{0}_{1}'.format(func.__name__, str(args[0]).replace('/', '').replace(':', ''))[:MAX_FILENAME_LENGTH]
+    """This method creates the default string representation of the input parameters, used for caching filename"""
+    return '{0}'.format(str(args[0]).replace('/', '').replace(':', ''))[:MAX_FILENAME_LENGTH]
 
 
 def html_decode(s):
@@ -32,14 +40,14 @@ def html_decode(s):
     Returns the ASCII decoded version of the given HTML string. This does
     NOT remove normal HTML tags like <p>.
     """
-    htmlCodes = (
-            ("'", '&#39;'),
-            ('"', '&quot;'),
-            ('>', '&gt;'),
-            ('<', '&lt;'),
-            ('&', '&amp;')
-        )
-    for code in htmlCodes:
+    html_codes = (
+        ("'", '&#39;'),
+        ('"', '&quot;'),
+        ('>', '&gt;'),
+        ('<', '&lt;'),
+        ('&', '&amp;')
+    )
+    for code in html_codes:
         s = s.replace(code[1], code[0])
     return s
 
@@ -47,9 +55,10 @@ def html_decode(s):
 def replace_all(text, dic):
     """
     This method returns the input string, but replaces its characters according to the input dictionary.
+
     :param text: input string
     :param dic: dictionary containing the changes. key is the character that's supposed to be changed and value is
-                the desired value
+            the desired value
     :rtype: string
     :return: String with the according characters replaced
     """
@@ -80,6 +89,8 @@ def normalize_text(text, lower=True, replace_spaces='_'):
 
 
 def caching(key_func=default_key_func):
+    """A decorator that creates local dumps of the decorated function's return values for given parameters.
+    It can take a key_func argument that determines the name of the output file."""
     def caching_func(func):
         if DEBUG:
             def decorated(*args):
@@ -109,5 +120,5 @@ class Cache:
         try:
             with open(os.path.join(CACHE_DIR, key), "rb") as file:
                 return pickle.load(file)
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             return None
