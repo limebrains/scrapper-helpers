@@ -87,6 +87,26 @@ def normalize_text(text, lower=True, replace_spaces='_'):
     return decoded_utf8
 
 
+def _float(number, default=None):
+    """Returns a float created from the given string or default if the cast is not possible."""
+    return get_number_from_string(number, float, default)
+
+
+def _int(number, default=None):
+    """Returns an int created from the given string or default if the cast is not possible."""
+    return get_number_from_string(number, int, default)
+
+
+def get_number_from_string(s, number_type, default):
+    """Returns a numeric value of number_type created from the given string or default if the cast is not possible."""
+    try:
+        return number_type(s.replace(",", "."))
+    except ValueError:
+        return default
+
+
+
+
 def caching(key_func=default_key_func):
     """A decorator that creates local dumps of the decorated function's return values for given parameters.
     It can take a key_func argument that determines the name of the output file."""
