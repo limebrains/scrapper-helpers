@@ -105,8 +105,6 @@ def get_number_from_string(s, number_type, default):
         return default
 
 
-
-
 def caching(key_func=default_key_func):
     """A decorator that creates local dumps of the decorated function's return values for given parameters.
     It can take a key_func argument that determines the name of the output file."""
