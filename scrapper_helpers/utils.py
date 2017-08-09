@@ -116,6 +116,7 @@ def get_number_from_string(s, number_type, default):
     except ValueError:
         return default
 
+    
 def get_random_user_agent():
     """ Randoms user agent to prevent "python" user agent
     :return: Random user agent from USER_AGENTS
@@ -137,6 +138,7 @@ def flatten(container):
                 yield j
         else:
             yield i
+
 
 def caching(key_func=default_key_func):
     """A decorator that creates local dumps of the decorated function's return values for given parameters.
