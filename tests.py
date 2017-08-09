@@ -16,16 +16,23 @@ else:
     'text,dic,expected_value', [
         ('ala', {'a': 'b'}, 'blb'),
         (u'Gdańsk', {u'ń': u'n'}, u'Gdansk')
-     ])
+    ])
 def test_replace_all(text, dic, expected_value):
     assert utils.replace_all(text, dic) == expected_value
+
+
+@pytest.mark.parametrize("list1", [[[2], [[3], [1]], [4, [0]]]])
+def test_flatten(list1):
+    result = utils.flatten(list1)
+    for element in result:
+        assert not isinstance(element, list)
 
 
 @pytest.mark.parametrize(
     'text,expected_value', [
         ('ala MA KoTa', 'ala_ma_kota'),
         ('Gdańsk', 'gdansk')
-     ])
+    ])
 def test_normalize_text(text, expected_value):
     assert utils.normalize_text(text) == expected_value
 
@@ -46,7 +53,7 @@ def test_key_sha1():
     'text,expected_value', [
         ('ala MA KoTa', 'ala MA KoTa'),
         ('ala:MA/KoTa', 'alaMAKoTa')
-     ])
+    ])
 def test_default_key_func(text, expected_value):
     assert utils.default_key_func(text) == expected_value
 
