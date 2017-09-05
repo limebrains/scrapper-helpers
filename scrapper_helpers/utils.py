@@ -5,7 +5,6 @@ import os
 import pickle
 import random
 import hashlib
-import random
 import subprocess
 import unicodedata
 
