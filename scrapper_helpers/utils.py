@@ -18,8 +18,10 @@ DEBUG = os.environ.get('DEBUG')
 CACHE_DIR = os.environ.get('CACHE_DIR', '/var/tmp/scrapper-helpers/')
 MAX_FILENAME_LENGTH = os.environ.get(
     'MAX_FILENAME_LENGTH',
-    int(subprocess.check_output("getconf NAME_MAX /", shell=True).strip())
 )
+if not MAX_FILENAME_LENGTH:
+    MAX_FILENAME_LENGTH = subprocess.check_output("getconf NAME_MAX /", shell=True).strip()
+MAX_FILENAME_LENGTH = int(MAX_FILENAME_LENGTH)
 
 USER_AGENTS = [
     'Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.0 Safari/537.36',
