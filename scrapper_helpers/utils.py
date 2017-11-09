@@ -147,11 +147,11 @@ def caching(key_func=default_key_func):
 
     def caching_func(func):
         if DEBUG:
-            def decorated(*args):
-                key = key_func(args)
+            def decorated(*args, **kwargs):
+                key = key_func(args, kwargs)
                 if Cache.get(key):
                     return Cache.get(key)
-                response = func(*args)
+                response = func(*args, **kwargs)
                 Cache.set(key, response)
                 return response
 
