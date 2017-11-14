@@ -8,11 +8,11 @@
 ## Running 
 
 ### Installation
-
+Version from https://pypi.python.org/pypi/pydrill:
 ```
 pip install scrapper-helpers
 ```
-or
+Latest version from git:
 ```
 pip install -r requirements.txt
 ```
