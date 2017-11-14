@@ -10,6 +10,10 @@
 ### Installation
 
 ```
+pip install scrapper-helpers
+```
+or
+```
 pip install -r requirements.txt
 ```
 
