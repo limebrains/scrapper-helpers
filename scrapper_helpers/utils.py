@@ -180,7 +180,8 @@ class Cache:
 
 
 def finder(many=True, *finder_args, **finder_kwargs):
-    """ Search for an element(or elements depending on variable 'many') with certain key(tag, class, id, ...) in a web page markup
+    """ Search for an element(or elements depending on variable 'many') with certain key(tag, class, id, ...)
+        in a web page markup
 
     :param many: decide whether searching for one or more elements
     :param finder_args: key to find
