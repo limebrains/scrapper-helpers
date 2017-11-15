@@ -8,13 +8,13 @@
 ## Running 
 
 ### Installation
-
+Version from https://pypi.python.org/pypi/scrapper-helpers:
 ```
 pip install scrapper-helpers
 ```
-
+Latest version from git:
 ```
-pip install -r requirements.txt
+pip install git+git://github.com/limebrains/scrapper-helpers.git
 ```
 
 ### Example script
