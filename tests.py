@@ -3,6 +3,7 @@
 
 import sys
 import pytest
+from bs4 import BeautifulSoup
 
 import scrapper_helpers.utils as utils
 
@@ -91,3 +92,33 @@ def test_get():
             mock.patch("scrapper_helpers.utils.open") as opn:
         utils.Cache.get("test")
         assert load.called and opn.called
+
+
+@pytest.mark.parametrize('markup, finder_args, finder_kwargs, expected_text', [
+    (
+        BeautifulSoup('<div><h1>text to find</h1></div>', 'html.parser'),
+        ('h1',), {'many': False},
+        'text to find',
+    ),
+    (
+        BeautifulSoup('<div><span class="find_me">text to find</span></div>', 'html.parser'),
+        (), {'class_': "find_me", 'many': False},
+        'text to find',
+    ),
+    (
+        BeautifulSoup('<div><span class="find_me">text to find</span></div>', 'html.parser'),
+        (), {'class_': "find_me", 'many': True},
+        'text to find',
+    ),
+])
+def test_finder(markup, finder_args, finder_kwargs, expected_text):
+
+    many = finder_kwargs.pop('many', False)
+
+    @utils.finder(many, *finder_args, **finder_kwargs)
+    def get_tag(item, *args, **kwargs):
+        if many:
+            return item[0].text
+        return item.text
+
+    assert get_tag(markup) == expected_text
