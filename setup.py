@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='scrapper_helpers',
-    version='0.0.2',
+    version='0.1.0',
     description='Scrapper helpers',
     author='LimeBrains',
     author_email='mail@limebrains.com',
